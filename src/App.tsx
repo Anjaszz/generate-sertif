@@ -16,13 +16,14 @@ function App() {
   const [textPosition, setTextPosition] = useState({ x: 50, y: 50 })
   const [fontSize, setFontSize] = useState(48)
   const [fontColor, setFontColor] = useState('#000000')
-  const [fontFamily, setFontFamily] = useState('Arial')
+  const [fontFamily, setFontFamily] = useState('Poppins')
   const [fontWeight, setFontWeight] = useState('bold')
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const previewCanvasRef = useRef<HTMLCanvasElement>(null)
 
   // Available fonts
   const availableFonts = [
+    'Poppins',
     'Arial',
     'Times New Roman',
     'Georgia',
@@ -321,7 +322,7 @@ function App() {
                     <select
                       value={fontFamily}
                       onChange={(e) => setFontFamily(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md  focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       {availableFonts.map((font) => (
                         <option key={font} value={font} style={{ fontFamily: font }}>
