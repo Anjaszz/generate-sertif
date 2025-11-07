@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import * as XLSX from 'xlsx'
 import JSZip from 'jszip'
+import jsPDF from 'jspdf'
 import './App.css'
 
 interface NameEntry {
@@ -18,6 +19,7 @@ function App() {
   const [fontColor, setFontColor] = useState('#000000')
   const [fontFamily, setFontFamily] = useState('Poppins')
   const [fontWeight, setFontWeight] = useState('bold')
+  const [outputFormat, setOutputFormat] = useState<'png' | 'jpg' | 'jpeg' | 'pdf'>('png')
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const previewCanvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -50,6 +52,13 @@ function App() {
     { value: '700', label: 'Bold' },
     { value: '800', label: 'Extra Bold' },
     { value: '900', label: 'Black' }
+  ]
+
+  const outputFormats = [
+    { value: 'png', label: 'PNG' },
+    { value: 'jpg', label: 'JPG' },
+    { value: 'jpeg', label: 'JPEG' },
+    { value: 'pdf', label: 'PDF' }
   ]
 
   // Handle template image upload
@@ -170,10 +179,25 @@ function App() {
 
         ctx.fillText(name, x, y)
 
-        // Convert to blob
-        canvas.toBlob((blob) => {
-          if (blob) resolve(blob)
-        }, 'image/png')
+        // Convert to blob based on selected format
+        if (outputFormat === 'pdf') {
+          // Generate PDF
+          const imgData = canvas.toDataURL('image/png')
+          const pdf = new jsPDF({
+            orientation: img.width > img.height ? 'landscape' : 'portrait',
+            unit: 'px',
+            format: [img.width, img.height]
+          })
+          pdf.addImage(imgData, 'PNG', 0, 0, img.width, img.height)
+          const pdfBlob = pdf.output('blob')
+          resolve(pdfBlob)
+        } else {
+          // Generate image (PNG, JPG, JPEG)
+          const mimeType = outputFormat === 'png' ? 'image/png' : 'image/jpeg'
+          canvas.toBlob((blob) => {
+            if (blob) resolve(blob)
+          }, mimeType, 0.95)
+        }
       }
       img.src = templateImage
     })
@@ -194,7 +218,7 @@ function App() {
       for (const entry of names) {
         const blob = await generateCertificate(entry.name)
         const sanitizedName = entry.name.replace(/[^a-z0-9]/gi, '_')
-        zip.file(`sertifikat_${sanitizedName}.png`, blob)
+        zip.file(`sertifikat_${sanitizedName}.${outputFormat}`, blob)
       }
 
       // Generate ZIP file
@@ -357,6 +381,22 @@ function App() {
                       onChange={(e) => setFontColor(e.target.value)}
                       className="w-20 h-10 rounded cursor-pointer"
                     />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Format Output
+                    </label>
+                    <select
+                      value={outputFormat}
+                      onChange={(e) => setOutputFormat(e.target.value as 'png' | 'jpg' | 'jpeg' | 'pdf')}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      {outputFormats.map((format) => (
+                        <option key={format.value} value={format.value}>
+                          {format.label}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               </div>
