@@ -1,40 +1,72 @@
+/* Glassmorphism & Pastel Soft Colors */
 #root {
   margin: 0 auto;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Glass Effect Classes */
+.glass-card {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  transition: all 0.3s ease;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Pastel Gradient Backgrounds */
+.gradient-pastel-1 {
+  background: linear-gradient(135deg, #ffd6ff 0%, #e7c6ff 25%, #c8b6ff 50%, #b8c0ff 75%, #bbd0ff 100%);
+}
+
+.gradient-pastel-2 {
+  background: linear-gradient(135deg, #ffc8dd 0%, #ffafcc 25%, #bde0fe 50%, #a2d2ff 100%);
+}
+
+.gradient-pastel-3 {
+  background: linear-gradient(135deg, #cdb4db 0%, #ffc8dd 25%, #ffafcc 50%, #bde0fe 75%, #a2d2ff 100%);
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
   }
-  to {
-    transform: rotate(360deg);
+  50% {
+    transform: translateY(-10px);
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.float-animation {
+  animation: float 3s ease-in-out infinite;
 }
 
-.card {
-  padding: 2em;
+/* Smooth Transitions */
+* {
+  transition: all 0.3s ease;
 }
 
-.read-the-docs {
-  color: #888;
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #b8c0ff, #a2d2ff);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #a2d2ff, #8ab4f8);
 }
